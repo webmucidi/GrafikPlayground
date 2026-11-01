@@ -37,7 +37,8 @@ button:hover:not(:disabled){transform:translateY(-1px);border-color:var(--mu)}bu
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
 .cd{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:8px 12px;font-size:.85rem}
 .ants{stroke-dasharray:4 3;animation:mv .5s linear infinite}@keyframes mv{to{stroke-dashoffset:-7}}
-@media (max-width:819px){html,body{height:auto;overflow:auto}.w{height:auto;min-height:100dvh}.cat{position:sticky;top:0;z-index:5;background:var(--bg)}.apps{flex:none;overflow:visible}#app-L,#app-E{height:auto}.gm{height:auto;min-height:100%}.stage{flex:none;display:block}svg.sc{width:100%;height:auto;max-height:42dvh}.pn{height:auto;min-height:230px}.track{height:auto}.sec{overflow:visible}.scr{height:auto;min-height:60dvh}}
+@media (max-width:819px){.top{position:sticky;top:42px;z-index:4;background:var(--bg);padding:4px 0}html,body{height:auto;overflow:auto}.w{height:auto;min-height:100dvh}.cat{position:sticky;top:0;z-index:5;background:var(--bg)}.apps{flex:none;overflow:visible}#app-L,#app-E{height:auto}.gm{height:auto;min-height:100%}.stage{flex:none;display:block}svg.sc{width:100%;height:auto;max-height:42dvh}.pn{height:auto;min-height:230px}.track{height:auto}.sec{overflow:visible}.scr{height:auto;min-height:60dvh}}
+.hm{padding:3px 10px;font-size:.8rem;border-radius:20px;white-space:nowrap}
 .fade{animation:fd .5s}@keyframes fd{from{opacity:0;transform:translateY(8px)}}
 </style></head><body><div class="w"><div class="cat"><button id="t-L" onclick="go('L')">Lasso araçları</button><button id="t-E" onclick="go('E')">Silgi araçları</button></div><div class="apps"><div id="app-L"></div><div id="app-E"></div></div></div>
 <script>
@@ -100,7 +101,7 @@ function shuffle(a){a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.rando
 function cheat(){return `<div class="cards">${Object.values(T).map(t=>`<div class="cd" style="border-left:5px solid ${t.c}"><b>${t.n}</b><div class="mu">${t.u}</div></div>`).join("")}</div>`}
 function start(){cancelAnimationFrame(raf);$("app-L").innerHTML=`<div class="scr fade"><h1>${TITLE}</h1><p class="mu">${INTRO}</p>${cheat()}<button class="p" onclick="LA.begin()">Başla</button></div>`}
 function begin(){Q=shuffle(S);i=0;sc=0;miss={};Object.keys(T).forEach(k=>miss[k]=0);show()}
-function show(){window.scrollTo(0,0);const s=Q[i];$("app-L").innerHTML=`<div class="gm fade"><div class="top"><span>Soru ${i+1}/${Q.length}</span><div class="bar"><i style="width:${i/Q.length*100}%"></i></div><span>✓ ${sc}</span></div>
+function show(){window.scrollTo(0,0);const s=Q[i];$("app-L").innerHTML=`<div class="gm fade"><div class="top"><span>Soru ${i+1}/${Q.length}</span><div class="bar"><i style="width:${i/Q.length*100}%"></i></div><span>✓ ${sc}</span><button class="hm" onclick="LA.start()">⌂ Bitir</button></div>
 <div class="stage">${scene(s)}</div>
 <div class="pn"><div class="track" id="tk">
 <section class="sec"><h2>${QTXT(s)}</h2><div class="bt">${Object.keys(T).map(k=>`<button data-k="${k}" onclick="LA.ans('${k}')"><span class="dot" style="background:${T[k].c}"></span>${T[k].n}</button>`).join("")}</div></section>
@@ -115,7 +116,7 @@ function ans(k){const s=Q[i],r=k==s.a;if(r)sc++;else miss[k]++;
 function tab(t){ct=t;document.querySelectorAll(".tabs button[data-t]").forEach(b=>{const on=b.dataset.t==t;b.classList.toggle("on",on);b.style.background=on?T[t].c:""});play(Q[i],t)}
 function replay(){play(Q[i],ct)}
 function next(){cancelAnimationFrame(raf);i++;i<Q.length?show():end()}
-function end(){const p=Math.round(sc/Q.length*100);$("app-L").innerHTML=`<div class="scr fade"><h1>${sc}/${Q.length} (%${p})</h1><p>${p>=80?"Harika! Senaryoya uygun aracı seçmeyi iyi oturtmuşsun.":p>=50?"İyi gidiyorsun; aşağıdaki özetle pekiştir.":"Biraz daha pratik gerekiyor; özeti oku ve tekrar dene."} <span class="mu">Hatalı seçimler — ${Object.keys(T).map(k=>T[k].n+": "+miss[k]).join(", ")}</span></p>${cheat()}<div class="cd"><b>Pratik kural</b><div class="mu">${RULE}</div></div><button class="p" onclick="LA.begin()">Tekrar dene</button></div>`}
+function end(){const p=Math.round(sc/Q.length*100);$("app-L").innerHTML=`<div class="scr fade"><h1>${sc}/${Q.length} (%${p})</h1><p>${p>=80?"Harika! Senaryoya uygun aracı seçmeyi iyi oturtmuşsun.":p>=50?"İyi gidiyorsun; aşağıdaki özetle pekiştir.":"Biraz daha pratik gerekiyor; özeti oku ve tekrar dene."} <span class="mu">Hatalı seçimler — ${Object.keys(T).map(k=>T[k].n+": "+miss[k]).join(", ")}</span></p>${cheat()}<div class="cd"><b>Pratik kural</b><div class="mu">${RULE}</div></div><div class="row"><button class="p" onclick="LA.begin()">Tekrar dene</button><button onclick="LA.start()">⌂ Ana sayfa</button></div></div>`}
 return{start,stop:()=>cancelAnimationFrame(raf),begin,ans,tab,next,replay,sl};})();
 const ER=(()=>{
 const $=i=>document.getElementById(i);
@@ -173,7 +174,7 @@ function shuffle(a){a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.rando
 function cheat(){return `<div class="cards">${Object.values(T).map(t=>`<div class="cd" style="border-left:5px solid ${t.c}"><b>${t.n}</b><div class="mu">${t.u}</div></div>`).join("")}</div>`}
 function start(){cancelAnimationFrame(raf);$("app-E").innerHTML=`<div class="scr fade"><h1>${TITLE}</h1><p class="mu">${INTRO}</p>${cheat()}<button class="p" onclick="ER.begin()">Başla</button></div>`}
 function begin(){Q=shuffle(S);i=0;sc=0;miss={};Object.keys(T).forEach(k=>miss[k]=0);show()}
-function show(){window.scrollTo(0,0);const s=Q[i];$("app-E").innerHTML=`<div class="gm fade"><div class="top"><span>Soru ${i+1}/${Q.length}</span><div class="bar"><i style="width:${i/Q.length*100}%"></i></div><span>✓ ${sc}</span></div>
+function show(){window.scrollTo(0,0);const s=Q[i];$("app-E").innerHTML=`<div class="gm fade"><div class="top"><span>Soru ${i+1}/${Q.length}</span><div class="bar"><i style="width:${i/Q.length*100}%"></i></div><span>✓ ${sc}</span><button class="hm" onclick="ER.start()">⌂ Bitir</button></div>
 <div class="stage">${scene(s)}</div>
 <div class="pn"><div class="track" id="tk">
 <section class="sec"><h2>${QTXT(s)}</h2><div class="bt">${Object.keys(T).map(k=>`<button data-k="${k}" onclick="ER.ans('${k}')"><span class="dot" style="background:${T[k].c}"></span>${T[k].n}</button>`).join("")}</div></section>
@@ -188,7 +189,7 @@ function ans(k){const s=Q[i],r=k==s.a;if(r)sc++;else miss[k]++;
 function tab(t){ct=t;document.querySelectorAll(".tabs button[data-t]").forEach(b=>{const on=b.dataset.t==t;b.classList.toggle("on",on);b.style.background=on?T[t].c:""});play(Q[i],t)}
 function replay(){play(Q[i],ct)}
 function next(){cancelAnimationFrame(raf);i++;i<Q.length?show():end()}
-function end(){const p=Math.round(sc/Q.length*100);$("app-E").innerHTML=`<div class="scr fade"><h1>${sc}/${Q.length} (%${p})</h1><p>${p>=80?"Harika! Senaryoya uygun aracı seçmeyi iyi oturtmuşsun.":p>=50?"İyi gidiyorsun; aşağıdaki özetle pekiştir.":"Biraz daha pratik gerekiyor; özeti oku ve tekrar dene."} <span class="mu">Hatalı seçimler — ${Object.keys(T).map(k=>T[k].n+": "+miss[k]).join(", ")}</span></p>${cheat()}<div class="cd"><b>Pratik kural</b><div class="mu">${RULE}</div></div><button class="p" onclick="ER.begin()">Tekrar dene</button></div>`}
+function end(){const p=Math.round(sc/Q.length*100);$("app-E").innerHTML=`<div class="scr fade"><h1>${sc}/${Q.length} (%${p})</h1><p>${p>=80?"Harika! Senaryoya uygun aracı seçmeyi iyi oturtmuşsun.":p>=50?"İyi gidiyorsun; aşağıdaki özetle pekiştir.":"Biraz daha pratik gerekiyor; özeti oku ve tekrar dene."} <span class="mu">Hatalı seçimler — ${Object.keys(T).map(k=>T[k].n+": "+miss[k]).join(", ")}</span></p>${cheat()}<div class="cd"><b>Pratik kural</b><div class="mu">${RULE}</div></div><div class="row"><button class="p" onclick="ER.begin()">Tekrar dene</button><button onclick="ER.start()">⌂ Ana sayfa</button></div></div>`}
 return{start,stop:()=>cancelAnimationFrame(raf),begin,ans,tab,next,replay,sl};})();
 const G=i=>document.getElementById(i);
 function go(k){LA.stop();ER.stop();G("app-L").innerHTML="";G("app-E").innerHTML="";G("t-L").classList.toggle("on",k=="L");G("t-E").classList.toggle("on",k=="E");(k=="L"?LA:ER).start()}
