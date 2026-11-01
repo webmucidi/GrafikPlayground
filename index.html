@@ -1,0 +1,195 @@
+<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Photoshop Seçim ve Silgi Araçları Antrenmanı</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f6f5f1;--cd:#fff;--tx:#1d1d1f;--mu:#666;--bd:#dedbd2;--ok:#1f9d55;--no:#d64545;color-scheme:light}
+html{height:100dvh;overflow:hidden;scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#151618;--cd:#202225;--tx:#f0f0f0;--mu:#a3a3a3;--bd:#34373b;--ok:#43c47a;--no:#ff7070;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#151618;--cd:#202225;--tx:#f0f0f0;--mu:#a3a3a3;--bd:#34373b;--ok:#43c47a;--no:#ff7070;color-scheme:dark}
+body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font:15px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+.w{height:100%;width:100%;display:flex;flex-direction:column;gap:8px;padding:8px 10px;box-sizing:border-box}
+.cat{display:flex;gap:8px;flex:0 0 auto}.cat button{flex:1;text-align:center;font-weight:700}.cat button.on{background:#2f6fed;color:#fff;border-color:transparent}
+.apps{flex:1;min-height:0}#app-L,#app-E{height:100%}#app-L:empty,#app-E:empty{display:none}
+h1,h2{margin:.1em 0 .3em;line-height:1.25}h1{font-size:1.4rem}h2{font-size:clamp(.92rem,2.1dvh,1.12rem)}
+.mu{color:var(--mu);font-size:.85rem}p{margin:.3em 0}
+.gm{height:100%;display:flex;flex-direction:column;gap:8px}
+.top{flex:0 0 auto;display:flex;align-items:center;gap:10px;font-size:.85rem;color:var(--mu)}
+.bar{flex:1;height:8px;background:var(--bd);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:#2f6fed;transition:width .4s}
+.stage{flex:1 1 0;min-height:0;display:flex}
+svg.sc{width:100%;height:100%;border-radius:10px;display:block}
+.pn{flex:0 0 auto;height:clamp(230px,46dvh,360px);overflow:hidden;background:var(--cd);border:1px solid var(--bd);border-radius:14px}
+.track{display:flex;width:300%;height:100%;transition:transform .4s ease}
+.sec{flex:0 0 33.3333%;box-sizing:border-box;padding:10px 12px;display:flex;flex-direction:column;gap:6px;overflow:auto;min-width:0}
+@media (min-width:820px){.gm{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);column-gap:12px}.top{grid-column:1/3}.pn{height:auto}body{font-size:16px}}
+button{font:inherit;color:var(--tx);background:var(--cd);border:2px solid var(--bd);border-radius:12px;padding:8px 12px;text-align:left;cursor:pointer;transition:transform .15s,border-color .15s}
+button:hover:not(:disabled){transform:translateY(-1px);border-color:var(--mu)}button:disabled{cursor:default}
+.bt{display:flex;flex-direction:column;gap:6px;margin-top:auto}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:8px}
+.ok{border-color:var(--ok)!important;background:color-mix(in srgb,var(--ok) 14%,var(--cd))}
+.no{border-color:var(--no)!important;background:color-mix(in srgb,var(--no) 14%,var(--cd))}
+.ban{font-weight:700;font-size:1.05rem;animation:pop .45s}.ban.n{animation:shake .5s}
+@keyframes pop{0%{transform:scale(.6);opacity:0}70%{transform:scale(1.08)}100%{transform:scale(1);opacity:1}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}.tabs button{padding:5px 10px;font-size:.8rem;border-radius:20px}.tabs button.on{color:#fff;border-color:transparent}
+.vd{font-weight:600;min-height:1.4em}
+.chip{display:inline-block;background:var(--bd);border-radius:20px;padding:1px 9px;margin:2px 4px 2px 0;font-size:.8rem}
+.p{background:#2f6fed;color:#fff;border:0;text-align:center;font-weight:600}.sec>.p{margin-top:auto}
+.row{display:flex;gap:8px;margin-top:auto}.row button{flex:1;text-align:center}
+.scr{height:100%;max-width:900px;margin:auto;display:flex;flex-direction:column;justify-content:center;gap:8px;overflow:auto}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
+.cd{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:8px 12px;font-size:.85rem}
+.ants{stroke-dasharray:4 3;animation:mv .5s linear infinite}@keyframes mv{to{stroke-dashoffset:-7}}
+.fade{animation:fd .5s}@keyframes fd{from{opacity:0;transform:translateY(8px)}}
+</style></head><body><div class="w"><div class="cat"><button id="t-L" onclick="go('L')">Lasso araçları</button><button id="t-E" onclick="go('E')">Silgi araçları</button></div><div class="apps"><div id="app-L"></div><div id="app-E"></div></div></div>
+<script>
+const LA=(()=>{
+const $=i=>document.getElementById(i),NS="http://www.w3.org/2000/svg";
+const T={L:{n:"Lasso Tool",c:"#e8890c",u:"Kenarı elle, serbest çizerek izlersin. Kenar belirsizse, kontrast düşükse ya da seçim kaba/organik olacaksa kullanılır."},
+P:{n:"Polygonal Lasso Tool",c:"#8a4fe0",u:"Kenarları düz çizgilerden oluşan nesnelerde (bina, tabela, kutu, ekran) her köşeye tıklarsın."},
+M:{n:"Magnetic Lasso Tool",c:"#0f9fb5",u:"Nesne ile arka plan arasında net renk/kontrast farkı olan, kıvrımlı kenarlarda araç kenara kendisi yapışır."}};
+const dd=v=>"M"+v.map(p=>p.join(" ")).join("L")+"Z";
+const S=[
+{o:"evi",n:"Arkada yoğun ağaç dokusu var",bg:["busy","#6f9e63"],v:[[70,170],[70,95],[150,40],[230,95],[230,170]],f:"#e6d3a8",ex:'<rect x="95" y="115" width="25" height="25" fill="#9cc"/><rect x="180" y="115" width="25" height="25" fill="#9cc"/><rect x="138" y="130" width="24" height="40" fill="#543"/>',a:"P",cue:["Düz kenarlar","Köşeli yapı","Karışık arka plan"],why:"Evin çatı ve duvar kenarları düz çizgilerdir. Arkadaki yaprak dokusu karışık olduğu için Magnetic yanlış yere yapışabilir; Polygonal ile köşelere tıklayarak temiz ve keskin bir seçim yaparsın."},
+{o:"kediyi",n:"Arka plan bulanık, kedi net",bg:["blur","#a89f90"],d:"M110 175C100 140 105 115 125 100L118 70L138 85C145 83 155 83 162 85L182 70L175 100C195 115 200 140 190 175Z",f:"#8a7448",ex:'<circle cx="140" cy="100" r="3" fill="#cb3"/><circle cx="160" cy="100" r="3" fill="#cb3"/>',a:"M",cue:["Kıvrımlı kenar","Net kontrast","Bulanık fon"],why:"Kedinin kenarı kıvrımlı ve girintili; ama bulanık fon sayesinde kedi net ve kontrastlı ayrışıyor. Magnetic kenara kendisi yapışır, tek tek tıklamak ya da elle çizmek gerekmez."},
+{o:"elmayı",n:"Beyaz zeminde kırmızı elma",bg:["plain","#f4f4f4"],d:"M150 60C170 45 205 60 205 100C205 140 175 165 150 160C125 165 95 140 95 100C95 60 130 45 150 60Z",f:"#c8281e",ex:'<path d="M150 60Q150 45 158 38" stroke="#4a3" stroke-width="3" fill="none"/>',a:"M",cue:["Çok yüksek kontrast","Pürüzsüz eğri"],why:"Beyaz fonda kırmızı elma: kontrast çok yüksek ve kenar yumuşak bir eğri. Magnetic saniyeler içinde kusursuz yapışır; Polygonal çok sayıda tıklama isterdi."},
+{o:"reklam panosunu",n:"Perspektifli dört köşeli pano, arkada sokak",bg:["busy","#8fa3b5"],v:[[50,50],[250,40],[250,120],[50,130]],f:"#f2c94c",ex:'<rect x="140" y="125" width="8" height="60" fill="#444"/>',a:"P",cue:["Düz kenarlar","Sadece 4 köşe"],why:"Dört düz kenar, dört köşe: dört tıklama yeter. Magnetic zemindeki dokulara kayabilir; Lasso ile düz çizgiyi elle tutturmak zordur."},
+{o:"beyaz kediyi",n:"Kar üzerinde yatan beyaz kedi",bg:["plain","#e9eef2"],d:"M80 160C70 120 120 105 160 110C200 100 230 130 220 160C190 175 110 175 80 160Z",f:"#f7f7f7",ex:'<circle cx="190" cy="125" r="3" fill="#789"/>',a:"L",lc:1,cue:["Düşük kontrast","Belirsiz kenar"],why:"Beyaz kedi ile kar neredeyse aynı renk: Magnetic kenarı bulamaz ve yanlış yere yapışır. Kenar düz de değil. Bu durumda Lasso ile yakınlaştırıp kenarı kendin izlersin."},
+{o:"bulutu",n:"Gökyüzünde yumuşak kenarlı bulut",bg:["plain","#cfe3f5"],d:"M70 130C50 110 70 85 95 90C100 60 140 55 155 80C175 60 215 75 210 100C240 105 240 135 215 140C180 150 100 150 70 130Z",f:"#ffffff",ex:"",a:"L",lc:1,cue:["Yumuşak kenar","Kaba seçim + Feather"],why:"Bulutun belirgin bir kenarı yok. Magnetic tutunamaz; Lasso ile bulutu kabaca çevreleyip Feather ile yumuşatmak doğal sonuç verir."},
+{o:"dur tabelasını",n:"Yoğun sokak arka planında sekizgen tabela",bg:["busy","#8a8f7a"],v:[[210,125],[175,160],[125,160],[90,125],[90,75],[125,40],[175,40],[210,75]],f:"#d02b2b",ex:'<text x="150" y="108" fill="#fff" font-size="22" font-weight="700" text-anchor="middle">DUR</text>',a:"P",cue:["8 düz kenar","Karışık fon"],why:"Sekizgenin tüm kenarları düz. Sekiz tıklama kesin sonuç verir; yoğun sokak dokusu Magnetic’i şaşırtabilir."},
+{o:"vazoyu",n:"Koyu fonda açık renkli vazo",bg:["plain","#2b2d3a"],d:"M130 40L170 40C165 60 165 70 185 95C205 125 195 165 170 170L130 170C105 165 95 125 115 95C135 70 135 60 130 40Z",f:"#e9d8b4",ex:"",a:"M",cue:["Yüksek kontrast","Kıvrımlı kenar"],why:"Koyu zeminde açık renkli, eğrilerden oluşan bir vazo: kontrast yüksek. Magnetic hızlı ve pürüzsüz seçer; Polygonal çok tıklama gerektirirdi."},
+{o:"yüzdeki lekeyi",n:"Cilt tonuna çok yakın küçük leke",bg:["plain","#e8b999"],d:"M120 90C130 70 165 75 175 95C185 115 160 135 140 128C120 125 110 105 120 90Z",f:"#c98f6e",ex:"",a:"L",lc:1,cue:["Düşük kontrast","Düzensiz organik şekil"],why:"Leke cilt tonuna çok yakın ve düzensiz. Magnetic tutunamaz; kaba bir Lasso seçimi ve Feather rötuş için yeterlidir."},
+{o:"kartondan kutuyu",n:"Düz zeminde duran karton kutu",bg:["plain","#c9d6c3"],v:[[150,35],[230,75],[230,150],[150,185],[70,150],[70,75]],f:"#c49a62",ex:'<path d="M70 75L150 115L230 75M150 115V185" stroke="#8a6a3a" fill="none" stroke-width="2"/>',a:"P",cue:["Düz kenarlar","6 köşe"],why:"Kutunun dış hattı altı düz kenardan oluşur. Altı tıklama yeter; kıvrım olmadığı için serbest çizim ya da yapışan araç gereksizdir."},
+{o:"ağacın yaprak kütlesini",n:"Açık gökyüzüne karşı yeşil ağaç tacı",bg:["plain","#9fd0f0"],d:"M100 100C80 90 85 60 110 62C115 35 160 30 175 55C205 50 220 80 200 100C215 120 185 135 165 125C150 140 120 135 115 120C100 125 90 115 100 100Z",f:"#2f6b2f",ex:'<rect x="142" y="130" width="14" height="50" fill="#5a3b1e"/>',a:"M",cue:["Çok girintili kenar","Yüksek kontrast"],why:"Yaprak kütlesinin kenarı çok girintili çıkıntılı ama gökyüzüyle kontrastı yüksek. Polygonal ile yüzlerce tıklama gerekirdi; Magnetic bunu otomatik yapar."}
+];
+S.forEach(s=>{if(s.v)s.d=dd(s.v)});
+function bgS(t,c){let s=`<rect width="300" height="200" fill="${c}"/>`;
+ if(t=="busy")for(let i=0;i<14;i++)s+=`<rect x="${i*47%290}" y="${i*31%120}" width="${18+i%4*10}" height="${40+i%5*25}" fill="${i%2?"#000":"#fff"}" opacity=".13"/>`;
+ if(t=="blur")for(let i=0;i<10;i++)s+=`<circle cx="${i*61%300}" cy="${i*37%200}" r="${14+i%3*8}" fill="${i%2?"#fff":"#334"}" opacity=".4" filter="url(#bl)"/>`;
+ return s}
+function scene(s){return `<svg class="sc" id="sv" viewBox="0 0 300 200"><defs><filter id="bl"><feGaussianBlur stdDeviation="5"/></filter></defs>${bgS(...s.bg)}<path id="ob" d="${s.d}" fill="${s.f}"/>${s.ex}<g id="ov"></g></svg>`}
+const cap=t=>({L:"Fareyi basılı tutup kenarı elle izliyorsun…",P:"Her köşeye tek tek tıklıyorsun; çizgiler düz birleşiyor…",M:"Kenara yaklaşıyorsun; araç kenara yapışıp kare bağlantı noktaları bırakıyor…"})[t];
+function verdict(s,t){if(t==s.a)return"✓ Bu senaryoda en verimli araç bu.";
+ if(t=="L")return"Yapılabilir ama yavaş ve titrek; elle kenar tutturmak zor.";
+ if(t=="P")return"Eğri kenar düz parçalara bölündü: çok tıklama gerekir, kenar köşeli kalır.";
+ return s.lc?"Kontrast düşük: araç kenarı bulamadı, yanlış yere yapıştı.":"Düz kenarlı nesnede köşelerde taşma ve fazla bağlantı noktası riski var."}
+let raf;
+function play(s,tool){cancelAnimationFrame(raf);const ov=$("ov"),ce=$("cap"),vd=$("vd");vd.textContent="";ce.textContent=cap(tool);
+ const pe=$("ob");const L=pe.getTotalLength(),n=Math.round(L/3);let pts=[];
+ if(tool=="P"){pts=s.v||Array.from({length:10},(_,i)=>{const p=pe.getPointAtLength(L*i/10);return[p.x,p.y]});pts=pts.concat([pts[0]])}
+ else for(let i=0;i<=n;i++){const p=pe.getPointAtLength(L*i/n);let x=p.x,y=p.y;
+  if(tool=="L"){x+=Math.sin(i*.9)*1.6+Math.cos(i*.37)*1.4;y+=Math.cos(i*.8)*1.6}
+  else if(s.lc){x+=Math.sin(i*.17)*9;y+=Math.cos(i*.13)*9}
+  pts.push([x,y])}
+ const N=pts.length-1,dur=tool=="P"?N*650:tool=="M"?6500:5000,col=T[tool].c,t0=performance.now(),str=a=>a.map(p=>p.join(",")).join(" ");
+ const f=()=>{const now=performance.now();const u=Math.min(1,(now-t0)/dur);let cur,vis,ex="";
+  if(tool=="P"){const k=Math.min(N-1,Math.floor(u*N)),l=u*N-k,e=Math.min(1,l*1.6);
+   cur=[pts[k][0]+(pts[k+1][0]-pts[k][0])*e,pts[k][1]+(pts[k+1][1]-pts[k][1])*e];vis=pts.slice(0,k+1).concat([cur]);
+   for(let j=0;j<=k;j++)ex+=`<rect x="${pts[j][0]-2.5}" y="${pts[j][1]-2.5}" width="5" height="5" fill="#fff" stroke="${col}"/>`;
+   if(l<.35)ex+=`<circle cx="${pts[k][0]}" cy="${pts[k][1]}" r="${4+l*40}" fill="none" stroke="${col}" stroke-width="1.5" opacity="${1-l*2.8}"/>`}
+  else{const i=Math.floor(u*N);cur=pts[i];vis=pts.slice(0,i+1);
+   if(tool=="M"){for(let j=0;j<=i;j+=9)ex+=`<rect x="${pts[j][0]-2.5}" y="${pts[j][1]-2.5}" width="5" height="5" fill="#fff" stroke="${col}"/>`;
+    ex+=`<circle cx="${cur[0]}" cy="${cur[1]}" r="10" fill="none" stroke="#fff" stroke-dasharray="2 2"/>`}}
+  const cu=`<path d="M0 0L0 12L3.5 9L6 14L8 13L5.5 8L10 8Z" fill="#fff" stroke="#000" stroke-width=".8" transform="translate(${cur[0]} ${cur[1]})"/><circle cx="${cur[0]+12}" cy="${cur[1]+14}" r="5" fill="${col}"/>`;
+  if(u<1){ov.innerHTML=`<polyline points="${str(vis)}" fill="none" stroke="#fff" stroke-width="3.2"/><polyline points="${str(vis)}" fill="none" stroke="${col}" stroke-width="1.6"/>${ex}${cu}`;raf=requestAnimationFrame(f)}
+  else{ov.innerHTML=`<polygon points="${str(pts)}" fill="${col}33" stroke="#fff" stroke-width="2.4"/><polygon class="ants" points="${str(pts)}" fill="none" stroke="#000" stroke-width="1.3"/>`;
+   ce.textContent="Başlangıca dönüp kapattık: seçim (hareketli çizgi) hazır.";vd.textContent=verdict(s,tool)}};
+ raf=requestAnimationFrame(f)}
+const TITLE='Lasso aracı seçme antrenmanı',INTRO='11 senaryo. Doğru lasso aracını seç; cevabından sonra aracın nasıl kullanıldığını animasyonla izle ve gerekçesini oku.',RULE='Kenar düz mü? → Polygonal. Kenar kıvrımlı ve kontrast net mi? → Magnetic. Kenar belirsiz, kontrast düşük ya da kaba seçim yeterliyse → Lasso.',QTXT=s=>`Fotoğraftaki ${s.o} arka plandan ayırmak için hangi aracı kullanmak daha mantıklıdır? <span class="mu">(${s.n})</span>`;
+
+let Q,i,sc,miss,ct;
+function shuffle(a){a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.random()*(k+1)|0;[a[k],a[j]]=[a[j],a[k]]}return a}
+function cheat(){return `<div class="cards">${Object.values(T).map(t=>`<div class="cd" style="border-left:5px solid ${t.c}"><b>${t.n}</b><div class="mu">${t.u}</div></div>`).join("")}</div>`}
+function start(){cancelAnimationFrame(raf);$("app-L").innerHTML=`<div class="scr fade"><h1>${TITLE}</h1><p class="mu">${INTRO}</p>${cheat()}<button class="p" onclick="LA.begin()">Başla</button></div>`}
+function begin(){Q=shuffle(S);i=0;sc=0;miss={};Object.keys(T).forEach(k=>miss[k]=0);show()}
+function show(){const s=Q[i];$("app-L").innerHTML=`<div class="gm fade"><div class="top"><span>Soru ${i+1}/${Q.length}</span><div class="bar"><i style="width:${i/Q.length*100}%"></i></div><span>✓ ${sc}</span></div>
+<div class="stage">${scene(s)}</div>
+<div class="pn"><div class="track" id="tk">
+<section class="sec"><h2>${QTXT(s)}</h2><div class="bt">${Object.keys(T).map(k=>`<button data-k="${k}" onclick="LA.ans('${k}')"><span class="dot" style="background:${T[k].c}"></span>${T[k].n}</button>`).join("")}</div></section>
+<section class="sec"><div class="ban" id="bn"></div><div class="tabs">${Object.keys(T).map(t=>`<button data-t="${t}" onclick="LA.tab('${t}')">${T[t].n}${t==s.a?" ★":""}</button>`).join("")}<button onclick="LA.replay()">↻ Tekrar</button></div><div id="cap" class="mu"></div><div id="vd" class="vd"></div><button class="p" onclick="LA.sl(2)">Gerekçe →</button></section>
+<section class="sec" id="s3"></section></div></div></div>`}
+function sl(n){$("tk").style.transform=`translateX(-${n*100/3}%)`}
+function ans(k){const s=Q[i],r=k==s.a;if(r)sc++;else miss[k]++;
+ document.querySelectorAll("#tk .bt button").forEach(b=>{b.disabled=true;if(b.dataset.k==s.a)b.classList.add("ok");else if(b.dataset.k==k)b.classList.add("no")});
+ const bn=$("bn");bn.className="ban"+(r?"":" n");bn.style.color=`var(--${r?"ok":"no"})`;bn.textContent=r?"✅ Doğru!":"❌ Yanlış — doğru cevap: "+T[s.a].n;
+ $("s3").innerHTML=`<div>${s.cue.map(c=>`<span class="chip">${c}</span>`).join("")}</div><p><b>Neden?</b> ${s.why}</p>${r?"":`<p class="mu"><b>${T[k].n}</b> ne zaman? ${T[k].u}</p>`}<div class="row"><button onclick="LA.sl(1)">← Animasyon</button><button class="p" onclick="LA.next()">${i+1<Q.length?"Sonraki soru →":"Sonucu gör"}</button></div>`;
+ sl(1);tab(s.a)}
+function tab(t){ct=t;document.querySelectorAll(".tabs button[data-t]").forEach(b=>{const on=b.dataset.t==t;b.classList.toggle("on",on);b.style.background=on?T[t].c:""});play(Q[i],t)}
+function replay(){play(Q[i],ct)}
+function next(){cancelAnimationFrame(raf);i++;i<Q.length?show():end()}
+function end(){const p=Math.round(sc/Q.length*100);$("app-L").innerHTML=`<div class="scr fade"><h1>${sc}/${Q.length} (%${p})</h1><p>${p>=80?"Harika! Senaryoya uygun aracı seçmeyi iyi oturtmuşsun.":p>=50?"İyi gidiyorsun; aşağıdaki özetle pekiştir.":"Biraz daha pratik gerekiyor; özeti oku ve tekrar dene."} <span class="mu">Hatalı seçimler — ${Object.keys(T).map(k=>T[k].n+": "+miss[k]).join(", ")}</span></p>${cheat()}<div class="cd"><b>Pratik kural</b><div class="mu">${RULE}</div></div><button class="p" onclick="LA.begin()">Tekrar dene</button></div>`}
+return{start,stop:()=>cancelAnimationFrame(raf),begin,ans,tab,next,replay,sl};})();
+const ER=(()=>{
+const $=i=>document.getElementById(i);
+const T={C:{n:"Eraser Tool",c:"#e8890c",u:"Fırçayla elle silersin. Küçük düzeltmeler, katmandan fazlalık/çıkıntı silme, yumuşak geçişler için. Renge bakmaz, sildiği yer gider."},
+M:{n:"Magic Eraser Tool",c:"#8a4fe0",u:"Tek tıkla, tıklanan renge benzer (Tolerance) tüm pikselleri siler. Düz, tek renkli arka planlar için."},
+B:{n:"Background Eraser Tool",c:"#0f9fb5",u:"Fırça ortasındaki artının altındaki rengi örnekler, kenara yakın benzer pikselleri siler, nesne kenarını korur. Saç, tüy, yaprak gibi karmaşık kenar + değişken/karışık arka plan için."}};
+const CAP={C:"Fırçayla silinecek bölgenin üzerinden elle geçiyorsun…",M:"Tek tıklıyorsun; tıklanan renge benzer pikseller (Tolerance) siliniyor…",B:"Artı işaretini nesne kenarında gezdiriyorsun; artının altındaki renk örneklenir, nesne kenarı korunur…"};
+const star=[[150,30],[167.6,75.7],[216.6,78.4],[178.5,109.3],[191.1,156.6],[150,130],[108.9,156.6],[121.5,109.3],[83.4,78.4],[132.4,75.7]];
+const zz=(x1,x2,y1,y2,st)=>{const a=[];let r=0;for(let y=y1;y<=y2;y+=st,r++){a.push([r%2?x2:x1,y],[r%2?x1:x2,y])}return a};
+const S=[
+{q:"Beyaz fon üzerindeki kırmızı yıldız logonun arka planını tamamen silmek istiyorsun.",d:"M"+star.map(p=>p.join(" ")).join("L")+"Z",f:"#d62828",bg:["plain","#ffffff"],m:"edge",flat:1,click:[20,20],ex:"",a:"M",cue:["Tek renkli fon","Tek tıkla biter"],why:"Arka plan düz beyaz tek renk. Magic Eraser ile bir kez tıklamak tüm beyazı siler; elle ya da kenar örnekleyerek uğraşmak gereksiz."},
+{q:"Düz mavi zemin üzerindeki sarı gülen yüz ikonunun arka planını silmek istiyorsun.",d:"M150 40A60 60 0 1 1 149.9 40Z",f:"#ffd23f",bg:["plain","#3fa7d6"],m:"edge",flat:1,click:[20,20],ex:'<circle cx="130" cy="85" r="6" fill="#333"/><circle cx="170" cy="85" r="6" fill="#333"/><path d="M120 120Q150 150 180 120" stroke="#333" stroke-width="5" fill="none"/>',a:"M",cue:["Flat renk","İkon / vektör görünümü"],why:"Zemin tek tonlu mavi. Magic Eraser tek tıkla hepsini kaldırır; nesne rengi farklı olduğu için sarı yüze dokunmaz."},
+{q:"Düz açık mavi gökyüzü önündeki kırmızı balonun arka planını silmek istiyorsun.",d:"M150 30C195 30 200 90 170 120C165 130 160 135 150 138C140 135 135 130 130 120C100 90 105 30 150 30Z",f:"#e63946",bg:["plain","#8ec9f5"],m:"edge",flat:1,click:[20,170],ex:"",a:"M",cue:["Tek tonlu gökyüzü","Net renk farkı"],why:"Gökyüzü pürüzsüz ve tek tondur; balon kırmızı. Tolerance düşükse Magic Eraser tek tıkla gökyüzünü siler, balon korunur."},
+{q:"Düz açık renk stüdyo zemininde çekilmiş mavi bir fincanın arka planını silmek istiyorsun.",d:"M100 70H200L190 160C188 172 176 175 150 175C124 175 112 172 110 160Z",f:"#3a6ea5",bg:["plain","#f0eee6"],m:"edge",flat:1,click:[15,15],ex:"",a:"M",cue:["Stüdyo fonu","Tek renk zemin"],why:"Ürün fotoğrafında zemin tek renk. Magic Eraser ile tek tıklama yeterli; hızlı ve temizdir."},
+{q:"Karışık sokak arka planında saçları dağınık bir portrenin arka planını silmek istiyorsun.",d:"M150 35C100 35 90 80 95 110C85 140 95 175 120 185L180 185C205 175 215 140 205 110C210 80 200 35 150 35Z",f:"#4a2f1d",bg:["busy","#7aa0c8"],m:"edge",click:[20,20],ex:'<ellipse cx="150" cy="115" rx="35" ry="45" fill="#f1c7a2"/>',a:"B",cue:["Saç gibi karmaşık kenar","Karışık arka plan"],why:"Fon tek renk değil ve saçın kenarı girintili. Background Eraser kenar rengini örnekleyip arka planı siler, saç tellerini korur. Magic Eraser burada parça parça siler."},
+{q:"Çimenli, renk geçişli bir arka planda tüylü bir köpeğin arka planını silmek istiyorsun.",d:"M70 170C65 130 85 100 115 95L120 65L135 80C150 78 160 80 170 82L185 62L190 95C225 100 240 135 232 170Z",f:"#b9772e",bg:["grad","#9bd36b","#3d7d32"],m:"edge",click:[20,20],ex:'<circle cx="150" cy="105" r="3" fill="#222"/>',a:"B",cue:["Tüylü kenar","Degrade arka plan"],why:"Arka plan degrade olduğu için tek tıkla silinemez; köpeğin tüylü kenarı elle silinirse yenir. Background Eraser kenarı koruyarak temiz siler."},
+{q:"Gün batımı degradeli gökyüzünde yaprak dolu bir ağaç tacının arka planını silmek istiyorsun.",d:"M100 100C80 90 85 60 110 62C115 35 160 30 175 55C205 50 220 80 200 100C215 120 185 135 165 125C150 140 120 135 115 120C100 125 90 115 100 100Z",f:"#1f4d2a",bg:["grad","#f6a05a","#5b3a8c"],m:"edge",click:[20,20],ex:"",a:"B",cue:["Yapraklı kenar","Renk geçişli gökyüzü"],why:"Gökyüzü sürekli renk değiştiriyor, yaprak kenarı çok girintili. Background Eraser her adımda altındaki rengi örnekleyerek yaprakları korur."},
+{q:"Çiçekli, karışık bir arka planda duran kelebeğin arka planını silmek istiyorsun.",d:"M150 100C130 40 60 40 62 90C64 125 110 130 150 110C120 140 100 165 120 175C140 180 150 140 150 118C150 140 160 180 180 175C200 165 180 140 150 110C190 130 236 125 238 90C240 40 170 40 150 100Z",f:"#f08a24",bg:["busy","#8fc58a"],m:"edge",click:[20,20],ex:"",a:"B",cue:["İnce kıvrımlı kenar","Karışık fon"],why:"Kelebeğin kenarı ince ve kıvrımlı, fon düz değil. Background Eraser kanat kenarını korur; Magic Eraser fonun her tonu için ayrı tıklama ister."},
+{q:"Yaprak katmanının sağına yanlışlıkla taşmış küçük çıkıntıyı silmek istiyorsun (yaprağın kendisi kalacak).",d:"M70 100C70 60 140 45 190 60C200 70 205 80 205 90L255 90L255 120L205 120C195 150 140 165 100 150C80 140 70 120 70 100Z",f:"#3d9a4a",bg:["plain","#f1efe8"],m:"part",er:zz(212,252,92,116,6),click:[120,100],ex:"",a:"C",cue:["Nesneyle aynı renk","Yalnız bir parça"],why:"Silinecek çıkıntı yaprakla aynı renkte; renge bakan araçlar ayıramaz. Eraser Tool ile sadece o bölgenin üzerinden fırçayla geçersin."},
+{q:"Çizimde fazladan kalmış üstteki çıkıntıyı silmek istiyorsun (binanın gövdesi kalacak).",d:"M70 100H140V40H160V100H230V170H70Z",f:"#5b6c8f",bg:["plain","#f1efe8"],m:"part",er:zz(142,158,46,94,12),click:[110,140],ex:"",a:"C",cue:["Aynı renk","Hassas elle düzeltme"],why:"Çıkıntı ve gövde aynı renk. Magic Eraser ikisini birlikte siler; Eraser Tool ile sadece çıkıntının üzerinden geçmek doğru yoldur."},
+{q:"Simge katmanında altta yanlışlıkla çizilmiş sapı silmek istiyorsun (yuvarlak kısım kalacak).",d:"M110 60H190C210 60 220 80 220 100C220 130 200 140 170 140V175H130V140C100 140 80 130 80 100C80 80 90 60 110 60Z",f:"#7a4fd0",bg:["plain","#f1efe8"],m:"part",er:zz(136,164,146,176,10),click:[150,100],ex:"",a:"C",cue:["Küçük düzeltme","Aynı renkli parça"],why:"Sap ile simge aynı renk; otomatik araçlar fark etmez. Eraser Tool ile sapın üzerinden fırçayla geçerek kesin kontrolle silersin."}
+];
+function bgS(b){const [t,c,c2]=b;let s=t=="grad"?`<defs><linearGradient id="gr" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="300" height="200" fill="url(#gr)"/>`:`<rect width="300" height="200" fill="${c}"/>`;
+ if(t=="busy")for(let i=0;i<14;i++)s+=`<rect x="${i*47%290}" y="${i*31%120}" width="${18+i%4*10}" height="${40+i%5*25}" fill="${i%2?"#000":"#fff"}" opacity=".15"/>`;return s}
+function scene(s){return `<svg class="sc" id="sv" viewBox="0 0 300 200"><defs><pattern id="ck" width="20" height="20" patternUnits="userSpaceOnUse"><rect width="20" height="20" fill="#cfcfcf"/><rect width="10" height="10" fill="#fff"/><rect x="10" y="10" width="10" height="10" fill="#fff"/></pattern><mask id="mk" maskUnits="userSpaceOnUse" x="0" y="0" width="300" height="200"><rect width="300" height="200" fill="#fff"/></mask><clipPath id="cc"><circle id="cr" cx="0" cy="0" r="0"/></clipPath></defs><rect width="300" height="200" fill="url(#ck)"/><g mask="url(#mk)">${bgS(s.bg)}<path id="ob" d="${s.d}" fill="${s.f}"/>${s.ex}</g><g id="ov"></g></svg>`}
+function verdict(s,t){if(t==s.a)return"✓ Bu senaryoda en verimli araç bu.";
+ if(s.m=="part")return t=="M"?"Nesneyle aynı renkteki tüm alan silindi; yalnızca fazlalığı silemezsin.":"Silinecek parça nesneyle aynı renkte olduğu için araç onu korudu: hiçbir şey silinmedi.";
+ if(t=="C")return"Elle kenar izlerken nesnenin kenarı yenmiş, arka plan kırıntıları kalmış; yavaş ve riskli.";
+ if(t=="M")return"Arka plan tek renk değil: yalnızca benzer tonlu küçük bölgeler silindi, kalanlar yerinde.";
+ return"Çalışır ama düz fonda gereksiz yavaş; Magic Eraser tek tıkla bitirirdi."}
+let raf;
+function play(s,tool){cancelAnimationFrame(raf);const mk=$("mk"),ov=$("ov"),ce=$("cap"),vd=$("vd"),cc=$("cr"),pe=$("ob"),col=T[tool].c,edge=s.m=="edge";vd.textContent="";ce.textContent=CAP[tool];
+ let pts=[];if(tool!="M"){if(!edge)pts=s.er;else{const L=pe.getTotalLength(),n=Math.round(L/4);for(let i=0;i<=n;i++){const p=pe.getPointAtLength(L*i/n);pts.push(tool=="C"?[p.x+Math.sin(i*.8)*5,p.y+Math.cos(i*.6)*5]:[p.x,p.y])}}}
+ const O=`<path d="${s.d}" fill="#fff"/>`,t0=performance.now(),str=a=>a.map(p=>p.join(",")).join(" ");
+ const f=()=>{const now=performance.now();const t=now-t0;let below="",bgl="",above="",cu="",fin=false;
+  if(tool=="M"){const cl=s.click,k=Math.min(1,Math.max(0,(t-500)/1700)),r=(edge&&!s.flat?38:320)*k;cc.setAttribute("cx",cl[0]);cc.setAttribute("cy",cl[1]);cc.setAttribute("r",r);
+   if(!edge)above=`<path d="${s.d}" fill="#000" clip-path="url(#cc)"/>`;
+   else if(s.flat)bgl=`<rect width="300" height="200" fill="#000" clip-path="url(#cc)"/>`;
+   else bgl=[[0,0,1],[110,10,.7],[40,120,.5]].map(a=>`<circle cx="${cl[0]+a[0]}" cy="${cl[1]+a[1]}" r="${r*a[2]}" fill="#000"/>`).join("");
+   if(t<700)cu+=`<circle cx="${cl[0]}" cy="${cl[1]}" r="${4+t/35}" fill="none" stroke="${col}" stroke-width="2" opacity="${1-t/700}"/>`;
+   cu+=`<path d="M0 0L0 12L3.5 9L6 14L8 13L5.5 8L10 8Z" fill="#fff" stroke="#000" stroke-width=".8" transform="translate(${cl[0]} ${cl[1]})"/>`;fin=k>=1}
+  else{const dur=!edge?4500:5500,u=Math.min(1,t/dur),w=tool=="B"?22:16,N=pts.length-1,i=Math.floor(u*N),cur=pts[i],vis=pts.slice(0,i+1);
+   const st=`<polyline points="${str(vis)}" fill="none" stroke="#000" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"/>`;
+   if(tool=="B")below=st;else above=st;
+   const fd=edge&&u>=1?Math.min(1,(t-dur)/900):0;if(edge)bgl=`<rect width="300" height="200" fill="#000" opacity="${fd}"/>`;
+   cu=tool=="B"?`<circle cx="${cur[0]}" cy="${cur[1]}" r="${w/2}" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="3 2"/><path d="M${cur[0]-5} ${cur[1]}h10M${cur[0]} ${cur[1]-5}v10" stroke="#fff" stroke-width="1.6"/>`:`<circle cx="${cur[0]}" cy="${cur[1]}" r="${w/2}" fill="none" stroke="${col}" stroke-width="1.6"/>`;
+   fin=edge?fd>=1:u>=1}
+  mk.innerHTML=`<rect width="300" height="200" fill="#fff"/>${below}${bgl}${O}${above}`;ov.innerHTML=cu;
+  if(!fin)raf=requestAnimationFrame(f);else{ce.textContent="Bitti: damalı alan silinen (şeffaf) bölgeyi gösterir.";vd.textContent=verdict(s,tool)}};
+ raf=requestAnimationFrame(f)}
+const TITLE='Silgi aracı seçme antrenmanı',INTRO='11 senaryo. Doğru silgi aracını seç; cevabından sonra animasyonu izle ve gerekçesini oku. Damalı alan silinmiş (şeffaf) bölgedir.',RULE='Arka plan tek renkli mi? → Magic Eraser. Karışık/degrade arka plan ve saç, tüy, yaprak gibi karmaşık kenar mı? → Background Eraser. Küçük, aynı renkli bir parçayı elle silmek mi? → Eraser Tool.',QTXT=s=>`${s.q} Hangi silgi aracını kullanmak daha mantıklıdır?`;
+
+let Q,i,sc,miss,ct;
+function shuffle(a){a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.random()*(k+1)|0;[a[k],a[j]]=[a[j],a[k]]}return a}
+function cheat(){return `<div class="cards">${Object.values(T).map(t=>`<div class="cd" style="border-left:5px solid ${t.c}"><b>${t.n}</b><div class="mu">${t.u}</div></div>`).join("")}</div>`}
+function start(){cancelAnimationFrame(raf);$("app-E").innerHTML=`<div class="scr fade"><h1>${TITLE}</h1><p class="mu">${INTRO}</p>${cheat()}<button class="p" onclick="ER.begin()">Başla</button></div>`}
+function begin(){Q=shuffle(S);i=0;sc=0;miss={};Object.keys(T).forEach(k=>miss[k]=0);show()}
+function show(){const s=Q[i];$("app-E").innerHTML=`<div class="gm fade"><div class="top"><span>Soru ${i+1}/${Q.length}</span><div class="bar"><i style="width:${i/Q.length*100}%"></i></div><span>✓ ${sc}</span></div>
+<div class="stage">${scene(s)}</div>
+<div class="pn"><div class="track" id="tk">
+<section class="sec"><h2>${QTXT(s)}</h2><div class="bt">${Object.keys(T).map(k=>`<button data-k="${k}" onclick="ER.ans('${k}')"><span class="dot" style="background:${T[k].c}"></span>${T[k].n}</button>`).join("")}</div></section>
+<section class="sec"><div class="ban" id="bn"></div><div class="tabs">${Object.keys(T).map(t=>`<button data-t="${t}" onclick="ER.tab('${t}')">${T[t].n}${t==s.a?" ★":""}</button>`).join("")}<button onclick="ER.replay()">↻ Tekrar</button></div><div id="cap" class="mu"></div><div id="vd" class="vd"></div><button class="p" onclick="ER.sl(2)">Gerekçe →</button></section>
+<section class="sec" id="s3"></section></div></div></div>`}
+function sl(n){$("tk").style.transform=`translateX(-${n*100/3}%)`}
+function ans(k){const s=Q[i],r=k==s.a;if(r)sc++;else miss[k]++;
+ document.querySelectorAll("#tk .bt button").forEach(b=>{b.disabled=true;if(b.dataset.k==s.a)b.classList.add("ok");else if(b.dataset.k==k)b.classList.add("no")});
+ const bn=$("bn");bn.className="ban"+(r?"":" n");bn.style.color=`var(--${r?"ok":"no"})`;bn.textContent=r?"✅ Doğru!":"❌ Yanlış — doğru cevap: "+T[s.a].n;
+ $("s3").innerHTML=`<div>${s.cue.map(c=>`<span class="chip">${c}</span>`).join("")}</div><p><b>Neden?</b> ${s.why}</p>${r?"":`<p class="mu"><b>${T[k].n}</b> ne zaman? ${T[k].u}</p>`}<div class="row"><button onclick="ER.sl(1)">← Animasyon</button><button class="p" onclick="ER.next()">${i+1<Q.length?"Sonraki soru →":"Sonucu gör"}</button></div>`;
+ sl(1);tab(s.a)}
+function tab(t){ct=t;document.querySelectorAll(".tabs button[data-t]").forEach(b=>{const on=b.dataset.t==t;b.classList.toggle("on",on);b.style.background=on?T[t].c:""});play(Q[i],t)}
+function replay(){play(Q[i],ct)}
+function next(){cancelAnimationFrame(raf);i++;i<Q.length?show():end()}
+function end(){const p=Math.round(sc/Q.length*100);$("app-E").innerHTML=`<div class="scr fade"><h1>${sc}/${Q.length} (%${p})</h1><p>${p>=80?"Harika! Senaryoya uygun aracı seçmeyi iyi oturtmuşsun.":p>=50?"İyi gidiyorsun; aşağıdaki özetle pekiştir.":"Biraz daha pratik gerekiyor; özeti oku ve tekrar dene."} <span class="mu">Hatalı seçimler — ${Object.keys(T).map(k=>T[k].n+": "+miss[k]).join(", ")}</span></p>${cheat()}<div class="cd"><b>Pratik kural</b><div class="mu">${RULE}</div></div><button class="p" onclick="ER.begin()">Tekrar dene</button></div>`}
+return{start,stop:()=>cancelAnimationFrame(raf),begin,ans,tab,next,replay,sl};})();
+const G=i=>document.getElementById(i);
+function go(k){LA.stop();ER.stop();G("app-L").innerHTML="";G("app-E").innerHTML="";G("t-L").classList.toggle("on",k=="L");G("t-E").classList.toggle("on",k=="E");(k=="L"?LA:ER).start()}
+go("L");
+</script></body></html>
