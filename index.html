@@ -37,6 +37,7 @@ button:hover:not(:disabled){transform:translateY(-1px);border-color:var(--mu)}bu
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px}
 .cd{background:var(--cd);border:1px solid var(--bd);border-radius:12px;padding:8px 12px;font-size:.85rem}
 .ants{stroke-dasharray:4 3;animation:mv .5s linear infinite}@keyframes mv{to{stroke-dashoffset:-7}}
+@media (max-width:819px){.apps{overflow-y:auto;-webkit-overflow-scrolling:touch}#app-L,#app-E{height:auto}.gm{height:auto;min-height:100%}.stage{flex:none;display:block}svg.sc{width:100%;height:auto;max-height:42dvh}.pn{height:auto;min-height:230px}.track{height:auto}.sec{overflow:visible}.scr{height:auto;min-height:100%}}
 .fade{animation:fd .5s}@keyframes fd{from{opacity:0;transform:translateY(8px)}}
 </style></head><body><div class="w"><div class="cat"><button id="t-L" onclick="go('L')">Lasso araçları</button><button id="t-E" onclick="go('E')">Silgi araçları</button></div><div class="apps"><div id="app-L"></div><div id="app-E"></div></div></div>
 <script>
@@ -99,13 +100,13 @@ function shuffle(a){a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.rando
 function cheat(){return `<div class="cards">${Object.values(T).map(t=>`<div class="cd" style="border-left:5px solid ${t.c}"><b>${t.n}</b><div class="mu">${t.u}</div></div>`).join("")}</div>`}
 function start(){cancelAnimationFrame(raf);$("app-L").innerHTML=`<div class="scr fade"><h1>${TITLE}</h1><p class="mu">${INTRO}</p>${cheat()}<button class="p" onclick="LA.begin()">Başla</button></div>`}
 function begin(){Q=shuffle(S);i=0;sc=0;miss={};Object.keys(T).forEach(k=>miss[k]=0);show()}
-function show(){const s=Q[i];$("app-L").innerHTML=`<div class="gm fade"><div class="top"><span>Soru ${i+1}/${Q.length}</span><div class="bar"><i style="width:${i/Q.length*100}%"></i></div><span>✓ ${sc}</span></div>
+function show(){document.querySelector(".apps").scrollTo(0,0);const s=Q[i];$("app-L").innerHTML=`<div class="gm fade"><div class="top"><span>Soru ${i+1}/${Q.length}</span><div class="bar"><i style="width:${i/Q.length*100}%"></i></div><span>✓ ${sc}</span></div>
 <div class="stage">${scene(s)}</div>
 <div class="pn"><div class="track" id="tk">
 <section class="sec"><h2>${QTXT(s)}</h2><div class="bt">${Object.keys(T).map(k=>`<button data-k="${k}" onclick="LA.ans('${k}')"><span class="dot" style="background:${T[k].c}"></span>${T[k].n}</button>`).join("")}</div></section>
 <section class="sec"><div class="ban" id="bn"></div><div class="tabs">${Object.keys(T).map(t=>`<button data-t="${t}" onclick="LA.tab('${t}')">${T[t].n}${t==s.a?" ★":""}</button>`).join("")}<button onclick="LA.replay()">↻ Tekrar</button></div><div id="cap" class="mu"></div><div id="vd" class="vd"></div><button class="p" onclick="LA.sl(2)">Gerekçe →</button></section>
 <section class="sec" id="s3"></section></div></div></div>`}
-function sl(n){$("tk").style.transform=`translateX(-${n*100/3}%)`}
+function sl(n){document.querySelector(".apps").scrollTo({top:0,behavior:"smooth"});$("tk").style.transform=`translateX(-${n*100/3}%)`}
 function ans(k){const s=Q[i],r=k==s.a;if(r)sc++;else miss[k]++;
  document.querySelectorAll("#tk .bt button").forEach(b=>{b.disabled=true;if(b.dataset.k==s.a)b.classList.add("ok");else if(b.dataset.k==k)b.classList.add("no")});
  const bn=$("bn");bn.className="ban"+(r?"":" n");bn.style.color=`var(--${r?"ok":"no"})`;bn.textContent=r?"✅ Doğru!":"❌ Yanlış — doğru cevap: "+T[s.a].n;
@@ -172,13 +173,13 @@ function shuffle(a){a=a.slice();for(let k=a.length-1;k>0;k--){const j=Math.rando
 function cheat(){return `<div class="cards">${Object.values(T).map(t=>`<div class="cd" style="border-left:5px solid ${t.c}"><b>${t.n}</b><div class="mu">${t.u}</div></div>`).join("")}</div>`}
 function start(){cancelAnimationFrame(raf);$("app-E").innerHTML=`<div class="scr fade"><h1>${TITLE}</h1><p class="mu">${INTRO}</p>${cheat()}<button class="p" onclick="ER.begin()">Başla</button></div>`}
 function begin(){Q=shuffle(S);i=0;sc=0;miss={};Object.keys(T).forEach(k=>miss[k]=0);show()}
-function show(){const s=Q[i];$("app-E").innerHTML=`<div class="gm fade"><div class="top"><span>Soru ${i+1}/${Q.length}</span><div class="bar"><i style="width:${i/Q.length*100}%"></i></div><span>✓ ${sc}</span></div>
+function show(){document.querySelector(".apps").scrollTo(0,0);const s=Q[i];$("app-E").innerHTML=`<div class="gm fade"><div class="top"><span>Soru ${i+1}/${Q.length}</span><div class="bar"><i style="width:${i/Q.length*100}%"></i></div><span>✓ ${sc}</span></div>
 <div class="stage">${scene(s)}</div>
 <div class="pn"><div class="track" id="tk">
 <section class="sec"><h2>${QTXT(s)}</h2><div class="bt">${Object.keys(T).map(k=>`<button data-k="${k}" onclick="ER.ans('${k}')"><span class="dot" style="background:${T[k].c}"></span>${T[k].n}</button>`).join("")}</div></section>
 <section class="sec"><div class="ban" id="bn"></div><div class="tabs">${Object.keys(T).map(t=>`<button data-t="${t}" onclick="ER.tab('${t}')">${T[t].n}${t==s.a?" ★":""}</button>`).join("")}<button onclick="ER.replay()">↻ Tekrar</button></div><div id="cap" class="mu"></div><div id="vd" class="vd"></div><button class="p" onclick="ER.sl(2)">Gerekçe →</button></section>
 <section class="sec" id="s3"></section></div></div></div>`}
-function sl(n){$("tk").style.transform=`translateX(-${n*100/3}%)`}
+function sl(n){document.querySelector(".apps").scrollTo({top:0,behavior:"smooth"});$("tk").style.transform=`translateX(-${n*100/3}%)`}
 function ans(k){const s=Q[i],r=k==s.a;if(r)sc++;else miss[k]++;
  document.querySelectorAll("#tk .bt button").forEach(b=>{b.disabled=true;if(b.dataset.k==s.a)b.classList.add("ok");else if(b.dataset.k==k)b.classList.add("no")});
  const bn=$("bn");bn.className="ban"+(r?"":" n");bn.style.color=`var(--${r?"ok":"no"})`;bn.textContent=r?"✅ Doğru!":"❌ Yanlış — doğru cevap: "+T[s.a].n;
